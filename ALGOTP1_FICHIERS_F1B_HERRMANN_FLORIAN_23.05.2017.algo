@@ -1,0 +1,115 @@
+PROGRAMME Traitement_fichiers_conjugaison
+
+//BUT:Afficher les contenus des différents fichiers, reconnaître le groupe de chaque verbe, conjuguer les différents verbes au présent de l'indicatif.
+//ENTREE:Différents verbes.
+//SORTIE:Contenu des différents fichiers.
+
+Procédure Creation_fichier
+
+VAR
+ 	f1:fichier de texte;
+
+DEBUT 
+	ASSIGNER(f1,'base_conjugaison.txt'); // On assigne au fichier f1 le fichier texte
+	REECRIRE(f1) // Ouverture en mode Ecriture
+	ECRIRE(f1,'rire') //On écrit les différents mots
+	ECRIRE(f1,'recevoir')
+	ECRIRE(f1,'aller')
+	ECRIRE(f1,'bouillir')
+	ECRIRE(f1,'envoyer')
+	ECRIRE(f1,'peindre')
+	ECRIRE(f1,'habiter')
+	ECRIRE(f1,'payer')
+	ECRIRE(f1,'mourir')
+	ECRIRE(f1,'hair')
+	ECRIRE(f1,'vouloir')
+	ECRIRE(f1,'finir')
+	ECRIRE(f1,'s''amuser')
+	FERMER(f1) // On ferme le fichier afin de ne pas perdre le texte écrit
+FIN
+FINPROCEDURE
+
+Fonction Groupe_verbe(var f: Texte):BOOLEEN // Permet de d'identifier les verbes du premier groupe
+
+VAR
+	verbe:CHAINE
+	test:BOOLEEN
+
+DEBUT
+
+testG1<-faux //On initialise les différents tests à faux
+testG2<-faux
+testG3<-faux
+TANT QUE NON(Eof(f1)) FAIRE //Tant que le programme n'arrive pas à la fin du fichier il continue
+	LIRE(f1,verbe)
+	SI (verbe)='ALLER' OU 'aller' ALORS // Ici ce verbe est une exception au groupe 3 
+		testG3<-vrai
+		testG1<-faux
+	SI length(verbe)-2='E'ET SI length(verbe)-1='R' OU SI length(verbe)-2='e'ET SI length(verbe)-1='r' OU SI length(verbe)-1='E' OU SI length(verbe)-1='e' ALORS //On test les deux derniers caractères afin de voir si ils correspondent au deux dernières lettres du premier groupe
+		testG1<-vrai
+	SINON SI length(verbe)-2='I' ET length(verbe)-1='R' OU SI length(verbe)-2='i' ET length(verbe)-1='r' ALORS
+		testG2<-vrai
+	SINON SI length(verbe)OU SI length(verbe)-3='O' ET length(verbe)-1='I'ET SI length(verbe)-2='I' ET length(verbe)-1='R' OU SI length length(verbe)-3='o' ET length(verbe)-1='o'ET SI length(verbe)-2='i' ET length(verbe)-1='r' ALORS //On test les deux derniers caractères afin de voir si ils correspondent au deux dernières lettres du premier groupe
+		testG3<-vrai
+	SINON
+		testG3<-vrai //Sauf cas exceptionnels, les verbes ne faisant pas partis du premier ou deuxième groupe sont automatiquements classés dans le troisième groupe
+	FINSI
+	FINSINON
+FINTANTQUE
+FINFONCTION
+
+Fonction Conjugaison_verbe(var testG1,testG2,testG3:BOOLEEN)
+
+VAR
+	
+
+ASSIGNER(f2,conjugaison.txt)
+REECRIRE(f2)
+SI testG1=vrai ALORS 
+	delete(verbe,(length(verbe)),2) // Si le verbe appartient au premier groupe alors le programme supprime les deux dernières lettres
+	ECRIRE('Je'+verbe+'e') // On affecte les différentes terminaisons selon le sujet
+	ECRIRE('Tu'+verbe+'es')
+	ECRIRE('Il/Elle'+verbe+'e')
+	ECRIRE('Nous'+verbe+'ons')
+	ECRIRE('Vous'+verbe+'ez')
+	ECRIRE('Ils'+verbe+'ent')
+FINSI
+
+SI testG2=vrai ALORS
+	delete(verbe,(length(verbe)),1) // Si le verbe appartient au premier groupe alors le programme supprime la dernière lettre
+	ECRIRE('Je'+verbe+'s') // On affecte les différentes terminaisons selon le sujet
+	ECRIRE('Tu'+verbe+'s')
+	ECRIRE('Il/Elle'+verbe+'t')
+	ECRIRE('Nous'+verbe+'ssons')
+	ECRIRE('Vous'+verbe+'ssez')
+	ECRIRE('Ils'+verbe+'ssent')
+FINSI
+FINFONCTION
+
+Procédure Affichage
+
+DEBUT
+
+	OUVRIR(f1,'base_conjugaison.txt') // On affiche le contenu du fichier 1
+	OUVRIR(f2,'conjugaison.txt') // On affiche le contenu du fichier 2
+	FERMER(f1) // On ferme le fichier 1
+	FERMER(f2) // On ferme le fichier 2
+
+FIN
+FINPROCEDURE
+ 
+DEBUT
+	Creation_fichier //On appelle les différentes procédures et fonctions afin de permettre au programme principal de les utiliser
+	Groupe_verbe
+	Conjugaison_verbe
+	Affichage
+FIN.
+	
+
+
+
+
+
+
+
+
